@@ -3,13 +3,11 @@ import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import DashboardLayout from './components/layout/DashboardLayout';
 import SportsPage from './pages/sports/SportsPage';
-import {
-  ProgressPage,
-  InvestmentsPage,
-  JobPage,
-  ProjectsPage,
-  AIPage
-} from './pages/dashboard/Placeholders';
+import ProgressPage from './pages/progress/ProgressPage';
+import InvestmentsPage from './pages/investments/InvestmentsPage';
+import JobPage from './pages/job/JobPage';
+import ProjectsPage from './pages/projects/ProjectsPage';
+import AIPage from './pages/ai/AIPage';
 import { useAuthStore } from './store/useAuthStore';
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {

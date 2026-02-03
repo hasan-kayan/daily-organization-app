@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, Sync } from 'lucide-react';
+import { Calendar, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -41,7 +41,7 @@ const SyncSchedule: React.FC = () => {
 
             <Button className="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-6 rounded-2xl flex items-center justify-center gap-3 transition-all shadow-xl shadow-blue-600/20">
                 <div className="flex w-6 h-6 items-center justify-center bg-white/20 rounded-lg">
-                    <span className="material-symbols-outlined text-sm leading-none">sync</span>
+                    <RefreshCw className="w-3 h-3" />
                 </div>
                 Sync with Calendar
             </Button>

@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Edge, Node, OnNodesChange, OnEdgesChange, OnConnect, applyNodeChanges, applyEdgeChanges, addEdge } from '@xyflow/react';
+import type { Edge, Node, OnNodesChange, OnEdgesChange, OnConnect } from '@xyflow/react';
+import { applyNodeChanges, applyEdgeChanges, addEdge } from '@xyflow/react';
 
 export interface AIAgent {
     id: string;
@@ -18,6 +19,25 @@ interface AIState {
     setNodes: (nodes: Node[]) => void;
     setEdges: (edges: Edge[]) => void;
 }
+
+const initialNodes: Node[] = [
+    {
+        id: 'research-agent',
+        type: 'agent',
+        position: { x: 50, y: 100 },
+        data: { name: 'Research Agent', model: 'GPT-4o', status: 'processing' },
+    },
+    {
+        id: 'code-assistant',
+        type: 'agent',
+        position: { x: 400, y: 250 },
+        data: { name: 'Code Assistant', model: 'Claude 3.5', status: 'idle' },
+    },
+];
+
+const initialEdges: Edge[] = [
+    { id: 'e1-2', source: 'research-agent', target: 'code-assistant', animated: true, style: { stroke: '#137fec' } },
+];
 
 export const useAIStore = create<AIState>()(
     persist(
@@ -43,21 +63,3 @@ export const useAIStore = create<AIState>()(
     )
 );
 
-const initialNodes: Node[] = [
-    {
-        id: 'research-agent',
-        type: 'agent',
-        position: { x: 50, y: 100 },
-        data: { name: 'Research Agent', model: 'GPT-4o', status: 'processing' },
-    },
-    {
-        id: 'code-assistant',
-        type: 'agent',
-        position: { x: 400, y: 250 },
-        data: { name: 'Code Assistant', model: 'Claude 3.5', status: 'idle' },
-    },
-];
-
-const initialEdges: Edge[] = [
-    { id: 'e1-2', source: 'research-agent', target: 'code-assistant', animated: true, style: { stroke: '#137fec' } },
-];

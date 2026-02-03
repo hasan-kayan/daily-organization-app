@@ -26,31 +26,6 @@ interface PortfolioState {
     toggleTask: (projectId: string, taskId: string) => void;
 }
 
-export const usePortfolioStore = create<PortfolioState>()(
-    persist(
-        (set) => ({
-            ecosystemProgress: 68,
-            projects: initialProjects,
-            addProject: (project) => set((state) => ({ projects: [...state.projects, project] })),
-            updateProjectProgress: (id, progress) => set((state) => ({
-                projects: state.projects.map(p => p.id === id ? { ...p, progress } : p)
-            })),
-            toggleTask: (projectId, taskId) => set((state) => ({
-                projects: state.projects.map(p => {
-                    if (p.id !== projectId) return p;
-                    return {
-                        ...p,
-                        pendingTasks: p.pendingTasks.map(t => t.id === taskId ? { ...t, completed: !t.completed } : t)
-                    };
-                })
-            })),
-        }),
-        {
-            name: 'portfolio-storage',
-        }
-    )
-);
-
 const initialProjects: PortfolioProject[] = [
     {
         id: '1',
@@ -78,3 +53,29 @@ const initialProjects: PortfolioProject[] = [
         ],
     },
 ];
+
+export const usePortfolioStore = create<PortfolioState>()(
+    persist(
+        (set) => ({
+            ecosystemProgress: 68,
+            projects: initialProjects,
+            addProject: (project) => set((state) => ({ projects: [...state.projects, project] })),
+            updateProjectProgress: (id, progress) => set((state) => ({
+                projects: state.projects.map(p => p.id === id ? { ...p, progress } : p)
+            })),
+            toggleTask: (projectId, taskId) => set((state) => ({
+                projects: state.projects.map(p => {
+                    if (p.id !== projectId) return p;
+                    return {
+                        ...p,
+                        pendingTasks: p.pendingTasks.map(t => t.id === taskId ? { ...t, completed: !t.completed } : t)
+                    };
+                })
+            })),
+        }),
+        {
+            name: 'portfolio-storage',
+        }
+    )
+);
+

@@ -40,28 +40,6 @@ interface JobState {
     addJournalEntry: (entry: JournalEntry) => void;
 }
 
-export const useJobStore = create<JobState>()(
-    persist(
-        (set) => ({
-            salary: 124500,
-            salaryGrowth: 5.2,
-            productivity: 94,
-            meetings: initialMeetings,
-            projects: initialProjects,
-            journalEntries: [],
-            setProductivity: (val) => set({ productivity: val }),
-            addMeeting: (meeting) => set((state) => ({ meetings: [...state.meetings, meeting] })),
-            updateProjectStatus: (id, status) => set((state) => ({
-                projects: state.projects.map(p => p.id === id ? { ...p, status } : p)
-            })),
-            addJournalEntry: (entry) => set((state) => ({ journalEntries: [entry, ...state.journalEntries] })),
-        }),
-        {
-            name: 'job-storage',
-        }
-    )
-);
-
 const initialMeetings: Meeting[] = [
     { id: '1', time: '10:30', period: 'AM', title: 'Q4 Strategy Review', type: 'Zoom', location: 'Zoom Meeting' },
     { id: '2', time: '02:00', period: 'PM', title: 'Project Alpha Sync', type: 'Physical', location: 'Room 304' },
@@ -87,3 +65,26 @@ const initialProjects: JobProject[] = [
         imageUrl: 'https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=200&h=200&fit=crop'
     },
 ];
+
+export const useJobStore = create<JobState>()(
+    persist(
+        (set) => ({
+            salary: 124500,
+            salaryGrowth: 5.2,
+            productivity: 94,
+            meetings: initialMeetings,
+            projects: initialProjects,
+            journalEntries: [],
+            setProductivity: (val) => set({ productivity: val }),
+            addMeeting: (meeting) => set((state) => ({ meetings: [...state.meetings, meeting] })),
+            updateProjectStatus: (id, status) => set((state) => ({
+                projects: state.projects.map(p => p.id === id ? { ...p, status } : p)
+            })),
+            addJournalEntry: (entry) => set((state) => ({ journalEntries: [entry, ...state.journalEntries] })),
+        }),
+        {
+            name: 'job-storage',
+        }
+    )
+);
+

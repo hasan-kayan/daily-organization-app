@@ -30,27 +30,6 @@ interface FinanceState {
     addTransaction: (transaction: Transaction) => void;
 }
 
-export const useFinanceStore = create<FinanceState>()(
-    persist(
-        (set) => ({
-            totalNetWorth: 342850.42,
-            assets: initialAssets,
-            transactions: [],
-            addAsset: (asset) => set((state) => ({ assets: [...state.assets, asset] })),
-            updateAsset: (id, updates) => set((state) => ({
-                assets: state.assets.map(a => a.id === id ? { ...a, ...updates } : a)
-            })),
-            addTransaction: (transaction) => set((state) => ({
-                transactions: [transaction, ...state.transactions],
-                totalNetWorth: state.totalNetWorth + (transaction.type === 'income' ? transaction.amount : -transaction.amount)
-            })),
-        }),
-        {
-            name: 'finance-storage',
-        }
-    )
-);
-
 const initialAssets: Asset[] = [
     {
         id: '1',
@@ -82,3 +61,25 @@ const initialAssets: Asset[] = [
         imageUrl: 'https://logo.clearbit.com/vanguard.com',
     },
 ];
+
+export const useFinanceStore = create<FinanceState>()(
+    persist(
+        (set) => ({
+            totalNetWorth: 342850.42,
+            assets: initialAssets,
+            transactions: [],
+            addAsset: (asset) => set((state) => ({ assets: [...state.assets, asset] })),
+            updateAsset: (id, updates) => set((state) => ({
+                assets: state.assets.map(a => a.id === id ? { ...a, ...updates } : a)
+            })),
+            addTransaction: (transaction) => set((state) => ({
+                transactions: [transaction, ...state.transactions],
+                totalNetWorth: state.totalNetWorth + (transaction.type === 'income' ? transaction.amount : -transaction.amount)
+            })),
+        }),
+        {
+            name: 'finance-storage',
+        }
+    )
+);
+

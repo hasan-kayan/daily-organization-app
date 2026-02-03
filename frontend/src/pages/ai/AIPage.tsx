@@ -1,5 +1,6 @@
-import React, { useCallback } from 'react';
-import { ReactFlow, Background, Controls, MiniMap, BackgroundVariant, NodeTypes } from '@xyflow/react';
+import React from 'react';
+import { ReactFlow, Background, Controls, MiniMap } from '@xyflow/react';
+import type { NodeTypes } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { useAIStore } from '@/store/useAIStore';
 import AgentNode from './components/AgentNode';
@@ -29,7 +30,10 @@ const AIPage: React.FC = () => {
                         <button className="px-6 py-2 rounded-xl bg-blue-600 text-white text-xs font-black uppercase tracking-widest shadow-lg shadow-blue-600/20">Canvas</button>
                         <button className="px-6 py-2 rounded-xl text-slate-500 text-xs font-black uppercase tracking-widest hover:text-slate-300">Agents</button>
                     </div>
-                    <Button className="bg-emerald-500 hover:bg-emerald-400 text-white rounded-2xl p-3 aspect-square shadow-xl shadow-emerald-500/20">
+                    <Button
+                        className="bg-emerald-500 hover:bg-emerald-400 text-white rounded-2xl p-3 aspect-square shadow-xl shadow-emerald-500/20"
+                        onClick={() => { }}
+                    >
                         <PlayCircle className="w-6 h-6 fill-white/20" />
                     </Button>
                 </div>
@@ -66,7 +70,6 @@ const AIPage: React.FC = () => {
                 <MiniMap
                     className="!bg-slate-900/50 !border-slate-800 !rounded-2xl !backdrop-blur-sm !bottom-6 !left-6"
                     maskColor="rgba(2, 6, 23, 0.7)"
-                    nodeBorderColor="#1e293b"
                     nodeColor="#111827"
                 />
             </ReactFlow>

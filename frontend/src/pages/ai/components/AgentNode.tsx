@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
-import { Handle, Position, NodeProps } from '@xyflow/react';
-import { Settings, Cpu, Play } from 'lucide-react';
+import { Handle, Position } from '@xyflow/react';
+import type { Node, NodeProps } from '@xyflow/react';
+import { Settings, Cpu } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export type AgentNodeData = {
@@ -9,7 +10,7 @@ export type AgentNodeData = {
     status: 'idle' | 'processing' | 'error';
 };
 
-const AgentNode = ({ data }: NodeProps<{ name: string; model: string; status: string }>) => {
+const AgentNode = ({ data }: NodeProps<Node<AgentNodeData>>) => {
     return (
         <div className="px-4 py-4 rounded-3xl bg-slate-900/90 backdrop-blur-xl border border-slate-700 shadow-2xl min-w-[240px] group transition-all hover:border-blue-600/50">
             <Handle

@@ -26,6 +26,32 @@ interface ProgressState {
     addTopic: (topic: Topic) => void;
 }
 
+const initialTopics: Topic[] = [
+    {
+        id: '1',
+        title: 'Mastering Python',
+        category: 'Tech',
+        progress: 65,
+        imageUrl: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&h=400&fit=crop',
+        syllabus: [
+            { id: 'm1', title: 'Introduction to Syntax', description: 'Variables, Data Types, and Logic', status: 'completed', type: 'description' },
+            { id: 'm2', title: 'Data Structures', description: 'Lists, Dictionaries, and Tuples', status: 'current', type: 'video' },
+            { id: 'm3', title: 'Object Oriented Programming', description: 'Classes, Objects, and Methods', status: 'locked', type: 'terminal' },
+        ],
+    },
+    {
+        id: '2',
+        title: 'Public Speaking',
+        category: 'Soft Skills',
+        progress: 30,
+        imageUrl: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=400&h=400&fit=crop',
+        syllabus: [
+            { id: 'm4', title: 'Overcoming Stage Fright', description: 'Breathing exercises and mindset', status: 'completed', type: 'video' },
+            { id: 'm5', title: 'Structuring Your Talk', description: 'Opening, Body, and Closing', status: 'current', type: 'description' },
+        ],
+    },
+];
+
 export const useProgressStore = create<ProgressState>()(
     persist(
         (set) => ({
@@ -58,28 +84,3 @@ export const useProgressStore = create<ProgressState>()(
     )
 );
 
-const initialTopics: Topic[] = [
-    {
-        id: '1',
-        title: 'Mastering Python',
-        category: 'Tech',
-        progress: 65,
-        imageUrl: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&h=400&fit=crop',
-        syllabus: [
-            { id: 'm1', title: 'Introduction to Syntax', description: 'Variables, Data Types, and Logic', status: 'completed', type: 'description' },
-            { id: 'm2', title: 'Data Structures', description: 'Lists, Dictionaries, and Tuples', status: 'current', type: 'video' },
-            { id: 'm3', title: 'Object Oriented Programming', description: 'Classes, Objects, and Methods', status: 'locked', type: 'terminal' },
-        ],
-    },
-    {
-        id: '2',
-        title: 'Public Speaking',
-        category: 'Soft Skills',
-        progress: 30,
-        imageUrl: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=400&h=400&fit=crop',
-        syllabus: [
-            { id: 'm4', title: 'Overcoming Stage Fright', description: 'Breathing exercises and mindset', status: 'completed', type: 'video' },
-            { id: 'm5', title: 'Structuring Your Talk', description: 'Opening, Body, and Closing', status: 'current', type: 'description' },
-        ],
-    },
-];
