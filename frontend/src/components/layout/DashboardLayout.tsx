@@ -1,35 +1,37 @@
 import React from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
+import * as Icons from 'lucide-react';
 import {
-    Dumbbell,
-    TrendingUp,
-    Briefcase,
-    FolderKanban,
-    Bot,
+    Plus,
     LogOut,
     Menu,
     X,
-    Target,
     LayoutDashboard
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useAppStore } from '@/store/useAppStore';
-
-const navItems = [
-    { name: 'Sports', path: '/sports', icon: Dumbbell },
-    { name: 'Personal Progress', path: '/progress', icon: Target },
-    { name: 'Investments', path: '/investments', icon: TrendingUp },
-    { name: 'Job', path: '/job', icon: Briefcase },
-    { name: 'Projects', path: '/projects', icon: FolderKanban },
-    { name: 'AI Systems', path: '/ai', icon: Bot },
-];
+import { useDashboardStore } from '@/store/useDashboardStore';
+import PageModal from '@/components/dashboard/PageModal';
 
 const DashboardLayout: React.FC = () => {
     const { isSidebarOpen, toggleSidebar } = useAppStore();
+    const { sections, addSection, setActiveSection } = useDashboardStore();
     const { user, logout } = useAuthStore();
     const location = useLocation();
+
+    const getIcon = (name: string) => {
+        const Icon = (Icons as any)[name];
+        return Icon || Icons.Folder;
+    };
+
+    const handleAddSection = () => {
+        const title = prompt('Enter section title:');
+        if (title) {
+            addSection({ title, iconName: 'Folder' });
+        }
+    };
 
     return (
         <div className="flex h-screen bg-[#020617] text-white overflow-hidden">
@@ -51,13 +53,23 @@ const DashboardLayout: React.FC = () => {
                     </div>
 
                     {/* Nav Links */}
-                    <nav className="flex-1 px-4 space-y-1 mt-4">
-                        {navItems.map((item) => {
-                            const isActive = location.pathname === item.path;
+                    <nav className="flex-1 px-4 space-y-1 mt-4 overflow-y-auto">
+                        <div className="flex items-center justify-between px-3 py-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                            <span>Sections</span>
+                            <button onClick={handleAddSection} className="hover:text-blue-400 transition-colors">
+                                <Plus className="w-3.5 h-3.5" />
+                            </button>
+                        </div>
+                        {sections.map((section) => {
+                            const path = `/section/${section.id}`;
+                            const isActive = location.pathname === path;
+                            const Icon = getIcon(section.iconName);
+
                             return (
                                 <Link
-                                    key={item.path}
-                                    to={item.path}
+                                    key={section.id}
+                                    to={path}
+                                    onClick={() => setActiveSection(section.id)}
                                     className={cn(
                                         "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all",
                                         isActive
@@ -65,8 +77,8 @@ const DashboardLayout: React.FC = () => {
                                             : "text-slate-400 hover:bg-slate-800 hover:text-slate-200"
                                     )}
                                 >
-                                    <item.icon className={cn("w-5 h-5", isActive ? "text-blue-400" : "text-slate-500")} />
-                                    {item.name}
+                                    <Icon className={cn("w-5 h-5", isActive ? "text-blue-400" : "text-slate-500")} />
+                                    {section.title}
                                     {isActive && (
                                         <div className="ml-auto w-1.5 h-1.5 bg-blue-400 rounded-full" />
                                     )}
@@ -118,6 +130,9 @@ const DashboardLayout: React.FC = () => {
                     <Outlet />
                 </main>
             </div>
+
+            {/* Modals */}
+            <PageModal />
         </div>
     );
 };

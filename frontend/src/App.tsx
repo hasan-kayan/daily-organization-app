@@ -2,12 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import DashboardLayout from './components/layout/DashboardLayout';
-import SportsPage from './pages/sports/SportsPage';
-import ProgressPage from './pages/progress/ProgressPage';
-import InvestmentsPage from './pages/investments/InvestmentsPage';
-import JobPage from './pages/job/JobPage';
-import ProjectsPage from './pages/projects/ProjectsPage';
-import AIPage from './pages/ai/AIPage';
+import DynamicSectionPage from './pages/dashboard/DynamicSectionPage';
 import { useAuthStore } from './store/useAuthStore';
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -32,13 +27,8 @@ function App() {
             </ProtectedRoute>
           }
         >
-          <Route index element={<Navigate to="/sports" />} />
-          <Route path="sports" element={<SportsPage />} />
-          <Route path="progress" element={<ProgressPage />} />
-          <Route path="investments" element={<InvestmentsPage />} />
-          <Route path="job" element={<JobPage />} />
-          <Route path="projects" element={<ProjectsPage />} />
-          <Route path="ai" element={<AIPage />} />
+          <Route index element={<Navigate to="/section/home" />} />
+          <Route path="section/:sectionId" element={<DynamicSectionPage />} />
         </Route>
 
         {/* Fallback */}
