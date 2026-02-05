@@ -27,7 +27,10 @@ function App() {
             </ProtectedRoute>
           }
         >
-          <Route index element={<Navigate to="/section/home" />} />
+          <Route index element={<div className="flex flex-col items-center justify-center h-full text-slate-500">
+            <h2 className="text-2xl font-black text-white mb-2">Welcome to LifeOS</h2>
+            <p className="text-slate-500 mb-6">Create your first section in the sidebar to get started.</p>
+          </div>} />
           <Route path="section/:sectionId" element={<DynamicSectionPage />} />
         </Route>
 

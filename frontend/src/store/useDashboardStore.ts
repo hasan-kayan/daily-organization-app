@@ -7,7 +7,8 @@ export interface DashboardComponent {
     type: string;
     title: string;
     config?: any;
-    gridSpan?: number; // 1 or 2
+    w?: number; // width in grid columns (1 or 2)
+    h?: number; // height unit (1, 2, etc.)
 }
 
 export interface DashboardPage {
@@ -44,23 +45,17 @@ interface DashboardState {
     setActivePage: (id: string | null) => void;
 
     resetToDefault: () => void;
+    reorderComponents: (sectionId: string, oldIndex: number, newIndex: number) => void;
+    updateComponentSize: (sectionId: string, componentId: string, w: number, h: number) => void;
 }
 
-const DEFAULT_SECTIONS: Section[] = [
-    {
-        id: 'home',
-        title: 'Dashboard',
-        iconName: 'LayoutDashboard',
-        components: [],
-        pages: []
-    }
-];
+const DEFAULT_SECTIONS: Section[] = [];
 
 export const useDashboardStore = create<DashboardState>()(
     persist(
         (set) => ({
             sections: DEFAULT_SECTIONS,
-            activeSectionId: 'home',
+            activeSectionId: null,
             activePageId: null,
 
             addSection: (section) => set((state) => ({
@@ -111,10 +106,28 @@ export const useDashboardStore = create<DashboardState>()(
             setActiveSection: (id) => set({ activeSectionId: id }),
             setActivePage: (id) => set({ activePageId: id }),
 
+            reorderComponents: (sectionId, oldIndex, newIndex) => set((state) => {
+                const sections = state.sections.map(s => {
+                    if (s.id !== sectionId) return s;
+                    const newComponents = [...s.components];
+                    const [removed] = newComponents.splice(oldIndex, 1);
+                    newComponents.splice(newIndex, 0, removed);
+                    return { ...s, components: newComponents };
+                });
+                return { sections };
+            }),
+
+            updateComponentSize: (sectionId, componentId, w, h) => set((state) => ({
+                sections: state.sections.map(s => s.id === sectionId ? {
+                    ...s,
+                    components: s.components.map(c => c.id === componentId ? { ...c, w, h } : c)
+                } : s)
+            })),
+
             resetToDefault: () => set({ sections: DEFAULT_SECTIONS })
         }),
         {
-            name: 'dashboard-storage',
+            name: 'dashboard-storage-v3',
         }
     )
 );
