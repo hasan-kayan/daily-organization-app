@@ -6,7 +6,8 @@ import {
     LogOut,
     Menu,
     X,
-    LayoutDashboard
+    LayoutDashboard,
+    Settings2
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -14,23 +15,18 @@ import { useAuthStore } from '@/store/useAuthStore';
 import { useAppStore } from '@/store/useAppStore';
 import { useDashboardStore } from '@/store/useDashboardStore';
 import PageModal from '@/components/dashboard/PageModal';
+import SectionModal from '@/components/dashboard/SectionModal';
+import ConfirmationModal from '@/components/dashboard/ConfirmationModal';
 
 const DashboardLayout: React.FC = () => {
     const { isSidebarOpen, toggleSidebar } = useAppStore();
-    const { sections, addSection, setActiveSection } = useDashboardStore();
+    const { sections, openSectionModal, setActiveSection } = useDashboardStore();
     const { user, logout } = useAuthStore();
     const location = useLocation();
 
     const getIcon = (name: string) => {
         const Icon = (Icons as any)[name];
         return Icon || Icons.Folder;
-    };
-
-    const handleAddSection = () => {
-        const title = prompt('Enter section title:');
-        if (title) {
-            addSection({ title, iconName: 'Folder' });
-        }
     };
 
     return (
@@ -53,10 +49,13 @@ const DashboardLayout: React.FC = () => {
                     </div>
 
                     {/* Nav Links */}
-                    <nav className="flex-1 px-4 space-y-1 mt-4 overflow-y-auto">
+                    <nav className="flex-1 px-4 space-y-1 mt-4 overflow-y-auto scrollbar-hide">
                         <div className="flex items-center justify-between px-3 py-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                             <span>Sections</span>
-                            <button onClick={handleAddSection} className="hover:text-blue-400 transition-colors">
+                            <button
+                                onClick={() => openSectionModal()}
+                                className="hover:text-blue-400 Transition-colors"
+                            >
                                 <Plus className="w-3.5 h-3.5" />
                             </button>
                         </div>
@@ -66,23 +65,34 @@ const DashboardLayout: React.FC = () => {
                             const Icon = getIcon(section.iconName);
 
                             return (
-                                <Link
-                                    key={section.id}
-                                    to={path}
-                                    onClick={() => setActiveSection(section.id)}
-                                    className={cn(
-                                        "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all",
-                                        isActive
-                                            ? "bg-blue-600/10 text-blue-400 font-medium"
-                                            : "text-slate-400 hover:bg-slate-800 hover:text-slate-200"
-                                    )}
-                                >
-                                    <Icon className={cn("w-5 h-5", isActive ? "text-blue-400" : "text-slate-500")} />
-                                    {section.title}
-                                    {isActive && (
-                                        <div className="ml-auto w-1.5 h-1.5 bg-blue-400 rounded-full" />
-                                    )}
-                                </Link>
+                                <div key={section.id} className="group relative">
+                                    <Link
+                                        to={path}
+                                        onClick={() => setActiveSection(section.id)}
+                                        className={cn(
+                                            "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all",
+                                            isActive
+                                                ? "bg-blue-600/10 text-blue-400 font-medium"
+                                                : "text-slate-400 hover:bg-slate-800 hover:text-slate-200"
+                                        )}
+                                    >
+                                        <Icon className={cn("w-5 h-5", isActive ? "text-blue-400" : "text-slate-500")} />
+                                        <span className="truncate pr-6">{section.title}</span>
+                                        {isActive && (
+                                            <div className="ml-auto w-1.5 h-1.5 bg-blue-400 rounded-full" />
+                                        )}
+                                    </Link>
+                                    <button
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            openSectionModal(section.id);
+                                        }}
+                                        className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-slate-600 hover:text-white hover:bg-slate-700 opacity-0 group-hover:opacity-100 transition-all"
+                                    >
+                                        <Settings2 className="w-3.5 h-3.5" />
+                                    </button>
+                                </div>
                             );
                         })}
                     </nav>
@@ -126,13 +136,15 @@ const DashboardLayout: React.FC = () => {
                 </header>
 
                 {/* Content Area */}
-                <main className="flex-1 overflow-y-auto bg-gradient-to-br from-[#020617] to-[#101922] p-4 lg:p-8">
+                <main className="flex-1 overflow-y-auto bg-gradient-to-br from-[#020617] to-[#101922] p-4 lg:p-8 scrollbar-hide">
                     <Outlet />
                 </main>
             </div>
 
             {/* Modals */}
             <PageModal />
+            <SectionModal />
+            <ConfirmationModal />
         </div>
     );
 };

@@ -29,8 +29,12 @@ interface DashboardState {
     sections: Section[];
     activeSectionId: string | null;
     activePageId: string | null; // For modal
+    isSectionModalOpen: boolean;
+    editingSectionId: string | null;
 
     // Actions
+    openSectionModal: (sectionId?: string) => void;
+    closeSectionModal: () => void;
     addSection: (section: Omit<Section, 'id' | 'components' | 'pages'>) => void;
     removeSection: (id: string) => void;
     updateSection: (id: string, updates: Partial<Section>) => void;
@@ -47,6 +51,7 @@ interface DashboardState {
     resetToDefault: () => void;
     reorderComponents: (sectionId: string, oldIndex: number, newIndex: number) => void;
     updateComponentSize: (sectionId: string, componentId: string, w: number, h: number) => void;
+    updateComponentConfig: (sectionId: string, componentId: string, config: any) => void;
 }
 
 const DEFAULT_SECTIONS: Section[] = [];
@@ -57,6 +62,17 @@ export const useDashboardStore = create<DashboardState>()(
             sections: DEFAULT_SECTIONS,
             activeSectionId: null,
             activePageId: null,
+            isSectionModalOpen: false,
+            editingSectionId: null,
+
+            openSectionModal: (sectionId) => set({
+                isSectionModalOpen: true,
+                editingSectionId: sectionId || null
+            }),
+            closeSectionModal: () => set({
+                isSectionModalOpen: false,
+                editingSectionId: null
+            }),
 
             addSection: (section) => set((state) => ({
                 sections: [...state.sections, {
@@ -121,6 +137,13 @@ export const useDashboardStore = create<DashboardState>()(
                 sections: state.sections.map(s => s.id === sectionId ? {
                     ...s,
                     components: s.components.map(c => c.id === componentId ? { ...c, w, h } : c)
+                } : s)
+            })),
+
+            updateComponentConfig: (sectionId, componentId, config) => set((state) => ({
+                sections: state.sections.map(s => s.id === sectionId ? {
+                    ...s,
+                    components: s.components.map(c => c.id === componentId ? { ...c, config } : c)
                 } : s)
             })),
 

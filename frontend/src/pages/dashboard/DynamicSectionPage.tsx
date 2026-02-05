@@ -5,7 +5,8 @@ import { DynamicComponent } from '@/components/dashboard/ComponentRegistry';
 import ComponentSelector from '@/components/dashboard/ComponentSelector';
 import SortableWidget from '@/components/dashboard/SortableWidget';
 import { AnimatePresence } from 'framer-motion';
-import { Plus, Settings2, FileText } from 'lucide-react';
+import * as Icons from 'lucide-react';
+import { Plus, Settings2, FileText, Folder } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
     DndContext,
@@ -36,6 +37,11 @@ const DynamicSectionPage: React.FC = () => {
     const [isSelectorOpen, setIsSelectorOpen] = useState(false);
 
     const section = sections.find(s => s.id === sectionId);
+
+    const getIcon = (name: string) => {
+        const Icon = (Icons as any)[name];
+        return Icon || Folder;
+    };
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -83,12 +89,19 @@ const DynamicSectionPage: React.FC = () => {
         }
     };
 
+    const SectionIcon = section ? getIcon(section.iconName) : Folder;
+
     return (
         <div className="max-w-6xl mx-auto space-y-8 pb-20">
             <header className="flex items-end justify-between">
                 <div className="flex flex-col gap-1">
-                    <h1 className="text-3xl font-black tracking-tight text-white">{section.title}</h1>
-                    <p className="text-slate-500 text-sm">Design your custom {section.title.toLowerCase()} workspace.</p>
+                    <div className="flex items-center gap-3 mb-1">
+                        <div className="w-10 h-10 bg-blue-600/10 rounded-xl flex items-center justify-center border border-blue-500/20">
+                            <SectionIcon className="w-5 h-5 text-blue-400" />
+                        </div>
+                        <h1 className="text-3xl font-black tracking-tight text-white">{section.title}</h1>
+                    </div>
+                    <p className="text-slate-500 text-sm pl-[52px]">Design your custom {section.title.toLowerCase()} workspace.</p>
                 </div>
                 <div className="flex gap-2">
                     <Button variant="outline" size="sm" className="bg-slate-800/50 border-slate-700 text-slate-300"
@@ -144,7 +157,13 @@ const DynamicSectionPage: React.FC = () => {
                                     onResize={(newW, newH) => updateComponentSize(section.id, comp.id, newW, newH)}
                                     onRemove={() => removeComponent(section.id, comp.id)}
                                 >
-                                    <DynamicComponent type={comp.type} title={comp.title} config={comp.config} />
+                                    <DynamicComponent
+                                        sectionId={section.id}
+                                        componentId={comp.id}
+                                        type={comp.type}
+                                        title={comp.title}
+                                        config={comp.config}
+                                    />
                                 </SortableWidget>
                             ))}
                         </AnimatePresence>

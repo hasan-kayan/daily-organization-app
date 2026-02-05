@@ -42,12 +42,23 @@ export const componentRegistry: Record<string, React.ComponentType<any>> = {
     'projects-card': ProjectCard,
 };
 
-export const DynamicComponent: React.FC<{ type: string; title: string; config?: any }> = ({ type, title, config }) => {
+export const DynamicComponent: React.FC<{
+    sectionId: string;
+    componentId: string;
+    type: string;
+    title: string;
+    config?: any
+}> = ({ sectionId, componentId, type, title, config }) => {
     const Component = componentRegistry[type] || (() => <Placeholder title={title} />);
 
     return (
         <Suspense fallback={<div className="h-32 bg-slate-800/20 animate-pulse rounded-2xl" />}>
-            <Component {...config} />
+            <Component
+                sectionId={sectionId}
+                componentId={componentId}
+                title={title}
+                {...config}
+            />
         </Suspense>
     );
 };

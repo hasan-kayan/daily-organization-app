@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { format, addDays, subDays, isSameDay } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
-import { useSportsStore } from '@/store/useSportsStore';
 
-const HorizontalCalendar: React.FC = () => {
-    const { selectedDate, setSelectedDate } = useSportsStore();
+interface HorizontalCalendarProps {
+    initialDate?: string;
+}
+
+const HorizontalCalendar: React.FC<HorizontalCalendarProps> = ({
+    initialDate
+}) => {
+    const [selectedDate, setSelectedDate] = useState(initialDate || format(new Date(), 'yyyy-MM-dd'));
 
     // Generate a range of dates around the selected date
     const dates = React.useMemo(() => {
@@ -14,20 +19,20 @@ const HorizontalCalendar: React.FC = () => {
     }, [selectedDate]);
 
     return (
-        <section className="py-6 overflow-hidden">
-            <div className="flex items-center justify-between px-4 mb-4">
-                <h3 className="font-bold text-lg capitalize">
+        <section className="py-6 overflow-hidden bg-slate-900/40 rounded-3xl border border-slate-800/50 backdrop-blur-sm h-full">
+            <div className="flex items-center justify-between px-6 mb-4">
+                <h3 className="font-bold text-lg capitalize text-white">
                     {format(new Date(selectedDate), 'MMMM yyyy')}
                 </h3>
                 <button
-                    onClick={() => setSelectedDate(new Date().toISOString().split('T')[0])}
+                    onClick={() => setSelectedDate(format(new Date(), 'yyyy-MM-dd'))}
                     className="text-blue-500 text-sm font-semibold hover:text-blue-400"
                 >
                     Today
                 </button>
             </div>
 
-            <div className="flex gap-4 px-4 overflow-x-auto custom-scrollbar items-center py-4 no-scrollbar">
+            <div className="flex gap-4 px-6 overflow-x-auto custom-scrollbar items-center py-4 no-scrollbar">
                 {dates.map((date) => {
                     const dateStr = format(date, 'yyyy-MM-dd');
                     const isSelected = isSameDay(date, new Date(selectedDate));
